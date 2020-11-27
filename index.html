@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+		<link rel="stylesheet" href="index.css">
+	</head>
+	<body>
+		<div id="app">
+			<div id="wrap">
+				<div class="add-row">
+					<input type="text" placeholder="" v-model="newTodoText" id="new-todo"/>
+					<button class="btn add-btn" v-on:click="addNewTodo">ADD</button>
+				</div>
+				<div class="list">
+					<ul>
+						<todo-item v-for="(todo, index) in todos"
+								v-bind:key="todo.id"
+								v-bind:data="todo"
+								v-on:click.native="itemChange(todo.id)"
+								v-bind:class="{checked: todo.ischecked}">
+						</todo-item>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+
+	<script>
+		Vue.component('todo-item', {
+			template: `<li>
+			          <span>{{ data.title }}</span>
+			        </li>`,
+			props: ['data']
+			})
+
+			new Vue({
+			el: '#app',
+			data: {
+			newTodoText: '',
+			nextTodoId: 3,
+			todos: [
+			  {
+			    id: 0,
+			    title: 'Do the dishes',
+			    ischecked: false
+			  },
+			  {
+			    id: 1,
+			    title: 'Take out the trash',
+			    ischecked: false
+			  },
+			  {
+			    id: 2,
+			    title: 'Mow the lawn',
+			    ischecked: false
+			  }
+			]
+			},
+			methods: {
+				addNewTodo: function () {
+				  if(this.newTodoText != ""){
+				    this.todos.push({
+				      id: this.nextTodoId,
+				      title: this.newTodoText,
+				      ischecked: false
+				    })
+				    this.nextTodoId++;
+				    this.newTodoText = '';
+				  }
+				},
+				itemChange: function(id) {
+				  this.todos[id].ischecked = !this.todos[id].ischecked;
+				}
+			}
+		})
+	</script>
+</html>
